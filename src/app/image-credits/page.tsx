@@ -1,0 +1,5 @@
+export const metadata = { title: 'Image Credits' };
+
+export default function ImageCredits() {
+  return <main id="main" className="container simple-page"><h1>Photography & credits</h1><p>The stock photographs on this website are illustrative. They do not depict Work Smart’s students, team or campus.</p><h2>Studying a textbook</h2><p>Photo by <a href="https://unsplash.com/photos/woman-sitting-on-chair-in-front-of-table-white-reading-book-4U3d6u_p-fE" target="_blank" rel="noreferrer">Sarah Noltner on Unsplash</a>.</p><h2>Learning with a laptop</h2><p>Photo by <a href="https://unsplash.com/photos/three-people-around-a-laptop-with-stickers-on-it-wmhehhmeA1o" target="_blank" rel="noreferrer">Mapbox on Unsplash</a>.</p><h2>Classroom videos</h2><p>Teacher and classroom images are thumbnails from lessons and videos published on the <a href="https://www.youtube.com/@WorkSmartSSC" target="_blank" rel="noreferrer">Work Smart SSC</a> and <a href="https://www.youtube.com/@WorkSmartHSC" target="_blank" rel="noreferrer">Work Smart HSC</a> channels supplied by the institute.</p></main>;
+}
