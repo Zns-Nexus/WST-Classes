@@ -1,10 +1,33 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
   --font-sans: var(--font-jakarta);
   --color-brand-blue: #3f3c9b;
   --color-brand-maroon: #7e2634;
   --color-brand-navy: #213f73;
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  @keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+    }
+  15%, 35% {
+    transform: translateZ(0) rotate(90deg);
+    }
+  65%, 85% {
+    transform: translateZ(0) rotate(270deg);
+    }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+    }
+  }
 }
 
 :root {
@@ -117,7 +140,8 @@ strong { font-weight: 700; }
 .hero-content { position: relative; z-index: 2; display: flex; align-items: center; padding: 56px 24px 104px 60px; }
 .hero-copy { max-width: 560px; }
 .hero-copy h1, .hero-copy h2 { color: #fff; font-size: clamp(38px, 4.3vw, 60px); line-height: 1.07; letter-spacing: -.03em; }
-.hero-copy h1 > span, .hero-copy h2 > span { color: var(--cream); }
+.hero-copy h1 > span, .hero-copy h2 > span { color: inherit; }
+.hero-copy .hero-accent { color: var(--cream); }
 .hero-copy > p { max-width: 470px; margin-top: 20px; color: #ffffffd9; font-size: 17.5px; line-height: 1.6; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .hero-carousel .button-primary { background: #fff; color: var(--slide, var(--blue)); }
