@@ -132,25 +132,25 @@ strong { font-weight: 700; }
 
 /* Full-bleed hero: content aligns to the page container, highlight cards overlap the bottom edge.
    Only the headline, description and photo change per slide; buttons and controls stay put. */
-:root { --hero-overlap: 72px; }
-.hero-carousel { --focus: #fff; --slide: var(--blue); --gutter: max(48px, calc((100cqw - var(--content)) / 2)); container-type: inline-size; position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); height: clamp(560px, calc(100svh - 182px), 760px); overflow: hidden; color: #fff; background-color: var(--slide); transition: background-color 1s ease; }
-.hero-content { position: relative; z-index: 2; display: flex; align-items: center; padding: 48px 40px calc(var(--hero-overlap) + 40px) var(--gutter); }
-.hero-copy { width: 100%; max-width: 600px; }
+:root { --header-height: 118px; --hero-inset: 32px; --hero-overlap: calc(var(--cards-height, 104px) + var(--hero-inset)); }
+.hero-carousel { --focus: #fff; --slide: var(--blue); --gutter: max(48px, calc((100cqw - var(--content)) / 2)); container-type: inline-size; position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); min-height: max(620px, calc(100svh - var(--header-height))); overflow: hidden; color: #fff; background-color: var(--slide); transition: background-color 1s ease; }
+.hero-content { position: relative; z-index: 2; display: flex; align-items: center; padding: clamp(36px, 6svh, 72px) 40px calc(var(--hero-overlap) + clamp(32px, 5svh, 64px)) var(--gutter); }
+.hero-copy { width: 100%; max-width: 640px; }
 .hero-slides { display: grid; }
 .hero-slide { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility 0s linear .45s; }
 .hero-slide.is-active { opacity: 1; visibility: visible; transition: opacity .6s ease .25s, visibility 0s; }
 .hero-slide p { transform: translateY(8px); transition: transform .6s var(--ease-out); }
 .hero-slide.is-active p { transform: none; transition: transform .9s var(--ease-out) .45s; }
-.hero-copy h1, .hero-copy h2 { color: #fff; font-size: clamp(40px, 3.9vw, 60px); line-height: 1.07; letter-spacing: -.03em; text-wrap: initial; }
+.hero-copy h1, .hero-copy h2 { color: #fff; font-size: clamp(40px, min(4vw, 7svh), 64px); line-height: 1.06; letter-spacing: -.03em; text-wrap: initial; }
 .hero-copy h1 > span, .hero-copy h2 > span { color: inherit; }
 .hero-copy .hero-accent { color: var(--cream); }
-.hero-slide p { max-width: 480px; margin-top: 20px; color: #ffffffd9; font-size: 17.5px; line-height: 1.6; }
-.hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.hero-slide p { max-width: 500px; margin-top: clamp(18px, 2.4svh, 26px); color: #ffffffd9; font-size: clamp(17px, 1.9svh, 19px); line-height: 1.6; }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(28px, 4svh, 40px); }
 .hero-carousel .button-primary { background: #fff; color: var(--slide); transition: color 1s ease, background .2s, transform .2s var(--ease-out); }
 .hero-carousel .button-primary:hover { background: var(--cream); box-shadow: none; }
 .hero-location { display: flex; align-items: center; gap: 8px; margin-top: 22px; color: #ffffffc7; font-size: 14px; }
 .hero-location svg { color: var(--cream); }
-.hero-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; padding-top: 18px; border-top: 1px solid #ffffff26; }
+.hero-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: clamp(28px, 4.5svh, 48px); padding-top: 18px; border-top: 1px solid #ffffff26; }
 .slide-tabs { display: flex; align-items: center; gap: 2px; margin-left: -5px; }
 .slide-tabs > button { width: 40px; min-height: 40px; padding: 18px 5px; border: 0; background: transparent; }
 .slide-tabs > button > span { display: block; height: 4px; border-radius: 4px; background: #ffffff59; transition: background .4s ease; }
@@ -406,6 +406,9 @@ strong { font-weight: 700; }
   .mobile-navigation a:not(.button) { padding: 14px 4px; border-bottom: 1px solid var(--line); font-size: 16.5px; font-weight: 600; }
   .mobile-navigation .button { margin-top: 18px; }
   .highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root { --cards-height: 152px; --hero-inset: 24px; }
+  .highlights li { padding: 14px 20px; }
+  .highlights li > span { width: 44px; height: 44px; }
   .highlights li:nth-child(3) { border-left: 0; }
   .highlights li:nth-child(n + 3) { border-top: 1px solid var(--line); }
   .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -429,6 +432,14 @@ strong { font-weight: 700; }
   .inner-hero { background: var(--blue); }
 }
 
+/* Portrait tablets: photo fills the space above the copy instead of leaving empty panel. */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  .hero-carousel { grid-template-columns: 1fr; grid-template-rows: minmax(240px, 1fr) auto; }
+  .hero-media { grid-row: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 28px)); }
+  .hero-figure { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 0 calc(100% - 38px)); }
+  .hero-content { grid-row: 2; padding: 28px var(--gutter) calc(var(--hero-overlap) + 36px); }
+}
+
 @media (max-width: 767px) {
   html { scroll-padding-top: 84px; }
   .container { width: calc(100% - 32px); }
@@ -443,7 +454,7 @@ strong { font-weight: 700; }
   .header-enquire { display: none; }
   .student-login { min-width: 44px; min-height: 44px; justify-content: center; }
   .student-login > span { display: none; }
-  :root { --hero-overlap: 28px; }
+  :root { --header-height: 108px; --hero-overlap: 28px; }
   .hero-carousel { --gutter: 16px; }
   .hero-carousel { grid-template-columns: 1fr; grid-template-rows: auto auto; height: auto; }
   .hero-media { grid-row: 1; aspect-ratio: 16 / 11; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 22px)); }
