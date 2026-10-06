@@ -12,8 +12,8 @@ for (const viewport of [{ width: 1440, height: 960 }, { width: 390, height: 844 
     await page.goto(base);
     await page.evaluate(() => document.fonts.ready);
     await expect(page.getByRole('heading', { name: 'Big dreams. Smarter preparation.' })).toBeVisible();
-    await expect(page.locator('.hero-slide.is-active img')).toBeVisible();
-    await expect.poll(() => page.locator('.hero-slide.is-active img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect(page.locator('.hero-figure.is-active img')).toBeVisible();
+    await expect.poll(() => page.locator('.hero-figure.is-active img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: testInfo.outputPath('homepage-viewport.png') });
     await page.locator('#classroom').scrollIntoViewIfNeeded();
@@ -96,7 +96,7 @@ test('header and carousel remain usable at smaller widths', async ({ page }) => 
     await page.setViewportSize({ width, height: 900 });
     await page.goto(base);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(page.locator('.hero-slide.is-active .button-primary')).toBeVisible();
+    await expect(page.locator('.hero-carousel .button-primary')).toBeVisible();
   }
 });
 
