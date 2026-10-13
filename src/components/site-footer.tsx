@@ -2,6 +2,25 @@ import Link from 'next/link';
 import { ArrowUpRight, InstagramLogo, MapPin, YoutubeLogo } from '@phosphor-icons/react/dist/ssr';
 import { Brand } from '@/components/site-header';
 
+const courses = [['SSC', 'ssc'], ['HSC', 'hsc'], ['NEET', 'neet'], ['JEE', 'jee'], ['MHT-CET', 'mht-cet'], ['HSC Computer Science', 'hsc-computer-science']];
+const explore = [['About us', '/#about'], ['Our results', '/#results'], ['Dates & updates', '/#updates'], ['Student portal', '/student-portal'], ['Contact us', '/#contact']];
+const socials = [
+  { href: 'https://www.instagram.com/worksmarttutorial/', label: 'SSC Instagram', icon: InstagramLogo },
+  { href: 'https://www.instagram.com/worksmart.hsc/', label: 'HSC Instagram', icon: InstagramLogo },
+  { href: 'https://www.youtube.com/@WorkSmartSSC', label: 'SSC YouTube', icon: YoutubeLogo },
+  { href: 'https://www.youtube.com/@WorkSmartHSC', label: 'HSC YouTube', icon: YoutubeLogo },
+];
+
 export function SiteFooter() {
-  return <footer className="site-footer"><div className="container footer-grid"><div className="footer-about"><Brand className="footer-brand" /><p className="footer-tagline">Don’t just work hard. <span>Work smart.</span></p><p>School, board and entrance preparation, closer to home.</p><span className="footer-location"><MapPin size={18} weight="fill" /> Naya Nagar, Mira Road</span></div><div><h3>Our courses</h3><div className="footer-links">{[['SSC', 'ssc'], ['HSC', 'hsc'], ['NEET', 'neet'], ['JEE', 'jee'], ['MHT-CET', 'mht-cet'], ['HSC Computer Science', 'hsc-computer-science']].map(([name, slug]) => <Link key={slug} href={`/courses/${slug}`}>{name}</Link>)}</div></div><div><h3>Explore Work Smart</h3><div className="footer-links"><Link href="/#about">About us</Link><Link href="/#results">Our results</Link><Link href="/#updates">Dates & updates</Link><Link href="/student-portal">Student portal</Link><Link href="/#contact">Contact us</Link><Link href="/privacy">Privacy</Link></div></div><div><h3>Follow the classroom</h3><div className="footer-links footer-socials"><a href="https://www.instagram.com/worksmarttutorial/" target="_blank" rel="noreferrer"><InstagramLogo size={19} /> SSC Instagram <ArrowUpRight size={14} /></a><a href="https://www.instagram.com/worksmart.hsc/" target="_blank" rel="noreferrer"><InstagramLogo size={19} /> HSC Instagram <ArrowUpRight size={14} /></a><a href="https://www.youtube.com/@WorkSmartSSC" target="_blank" rel="noreferrer"><YoutubeLogo size={19} /> SSC YouTube <ArrowUpRight size={14} /></a><a href="https://www.youtube.com/@WorkSmartHSC" target="_blank" rel="noreferrer"><YoutubeLogo size={19} /> HSC YouTube <ArrowUpRight size={14} /></a></div></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} Work Smart Tutorials. All rights reserved.</span><span>Stock photography is illustrative, not a depiction of our campus. <Link href="/image-credits">Image credits</Link></span></div></footer>;
+  return <footer className="site-footer">
+    <div className="container footer-top">
+      <div className="footer-about"><Brand className="footer-brand" /><p className="footer-tagline">Don’t just work hard. <span>Work smart.</span></p><p>School, board and entrance preparation, closer to home.</p><span className="footer-location"><MapPin size={16} weight="fill" /> Naya Nagar, Mira Road</span></div>
+      <nav className="footer-nav" aria-label="Footer">
+        <div><h3>Courses</h3><ul className="footer-links footer-links-split">{courses.map(([name, slug]) => <li key={slug}><Link href={`/courses/${slug}`}>{name}</Link></li>)}</ul></div>
+        <div><h3>Explore</h3><ul className="footer-links">{explore.map(([name, href]) => <li key={href}><Link href={href}>{name}</Link></li>)}</ul></div>
+        <div><h3>Follow the classroom</h3><ul className="footer-links">{socials.map(social => <li key={social.href}><a href={social.href} target="_blank" rel="noreferrer"><social.icon size={17} /> {social.label} <ArrowUpRight size={12} /></a></li>)}</ul></div>
+      </nav>
+    </div>
+    <div className="container footer-bottom"><span>© {new Date().getFullYear()} Work Smart Tutorials. All rights reserved.</span><span>Stock photography is illustrative, not a depiction of our campus. <Link href="/image-credits">Image credits</Link> · <Link href="/privacy">Privacy</Link></span></div>
+  </footer>;
 }

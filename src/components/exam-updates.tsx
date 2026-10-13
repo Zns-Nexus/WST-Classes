@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'motion/react';
 import { ArrowUpRight, CalendarBlank, Megaphone, PlayCircle } from '@phosphor-icons/react';
 
 const updates = [
@@ -11,5 +12,5 @@ const updates = [
 
 export function ExamUpdates() {
   const [category, setCategory] = useState('All updates');
-  return <><div className="update-filters" role="group" aria-label="Filter updates">{['All updates', 'Exam notices', 'From the classroom'].map(name => <button key={name} aria-pressed={category === name} onClick={() => setCategory(name)}>{name}</button>)}</div><div className="update-list" aria-live="polite">{updates.filter(update => category === 'All updates' || category === update.category).map(update => <article key={update.title} className="update-row"><span className="update-icon"><update.icon size={24} weight="duotone" /></span><div><span className="update-category">{update.tag}</span><h3>{update.title}</h3><p>{update.text}</p></div><a href={update.link} target="_blank" rel="noreferrer" className="update-link"><span>{update.label}</span><ArrowUpRight size={20} weight="bold" /></a></article>)}</div></>;
+  return <><div className="update-filters" role="group" aria-label="Filter updates">{['All updates', 'Exam notices', 'From the classroom'].map(name => <button key={name} aria-pressed={category === name} onClick={() => setCategory(name)}>{category === name && <motion.span layoutId="update-filter-pill" className="filter-pill" transition={{ type: 'spring', bounce: 0.15, duration: 0.45 }} />}{name}</button>)}</div><div className="update-list" aria-live="polite">{updates.filter(update => category === 'All updates' || category === update.category).map(update => <article key={update.title} className="update-row"><span className="update-icon"><update.icon size={20} weight="duotone" /></span><div><span className="update-category">{update.tag}</span><h3>{update.title}</h3><p>{update.text}</p></div><a href={update.link} target="_blank" rel="noreferrer" className="update-link"><span>{update.label}</span><ArrowUpRight size={18} weight="bold" /></a></article>)}</div></>;
 }
