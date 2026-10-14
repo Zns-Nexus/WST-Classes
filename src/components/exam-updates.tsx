@@ -1,16 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'motion/react';
-import { ArrowUpRight, CalendarBlank, Megaphone, PlayCircle } from '@phosphor-icons/react';
+import { ArrowUpRight, CalendarBlank, InstagramLogo } from '@phosphor-icons/react';
+import { FilterTabs } from '@/components/filter-tabs';
+import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from '@/components/ui/item';
+
+const categories = ['All updates', 'Exam notices', 'Classroom'] as const;
 
 const updates = [
-  { category: 'Exam notices', icon: CalendarBlank, title: 'MHT-CET official notices', text: 'Application information, exam schedules and announcements from the Maharashtra CET Cell.', link: 'https://cetcell.mahacet.org/', label: 'Visit CET Cell', tag: 'Official source' },
-  { category: 'From the classroom', icon: PlayCircle, title: 'A closer look at HSC classes', text: 'Watch our demo lecture introduction and get a feel for the Work Smart classroom.', link: 'https://www.youtube.com/watch?v=h4JfjIbtSCI', label: 'Watch on YouTube', tag: 'HSC' },
-  { category: 'From the classroom', icon: Megaphone, title: 'What’s happening at Work Smart?', text: 'Classroom moments and institute announcements, straight from our official Instagram account.', link: 'https://www.instagram.com/worksmarttutorial/', label: 'Visit Instagram', tag: 'Work Smart' },
-];
+  { category: 'Exam notices', icon: CalendarBlank, title: 'MHT-CET notices', text: 'Applications, exam schedules and results from the State CET Cell.', link: 'https://cetcell.mahacet.org/' },
+  { category: 'Exam notices', icon: CalendarBlank, title: 'SSC and HSC board notices', text: 'Timetables and circulars from the Maharashtra State Board.', link: 'https://www.mahahsscboard.in/' },
+  { category: 'Classroom', icon: InstagramLogo, title: 'News from Work Smart', text: 'Class moments and announcements on our Instagram.', link: 'https://www.instagram.com/worksmarttutorial/' },
+] as const;
 
 export function ExamUpdates() {
-  const [category, setCategory] = useState('All updates');
-  return <><div className="update-filters" role="group" aria-label="Filter updates">{['All updates', 'Exam notices', 'From the classroom'].map(name => <button key={name} aria-pressed={category === name} onClick={() => setCategory(name)}>{category === name && <motion.span layoutId="update-filter-pill" className="filter-pill" transition={{ type: 'spring', bounce: 0.15, duration: 0.45 }} />}{name}</button>)}</div><div className="update-list" aria-live="polite">{updates.filter(update => category === 'All updates' || category === update.category).map(update => <article key={update.title} className="update-row"><span className="update-icon"><update.icon size={20} weight="duotone" /></span><div><span className="update-category">{update.tag}</span><h3>{update.title}</h3><p>{update.text}</p></div><a href={update.link} target="_blank" rel="noreferrer" className="update-link"><span>{update.label}</span><ArrowUpRight size={18} weight="bold" /></a></article>)}</div></>;
+  const [category, setCategory] = useState<(typeof categories)[number]>('All updates');
+  return <>
+    <FilterTabs id="updates" label="Filter updates" options={categories} value={category} onChange={setCategory} />
+    <ItemGroup className="update-list" aria-live="polite">
+      {updates.filter(update => category === 'All updates' || category === update.category).map(update => <Item key={update.title} asChild className="update-item"><a href={update.link} target="_blank" rel="noreferrer">
+        <ItemMedia variant="icon"><update.icon size={20} weight="duotone" /></ItemMedia>
+        <ItemContent><ItemTitle>{update.title}</ItemTitle><ItemDescription>{update.text}</ItemDescription></ItemContent>
+        <ItemActions><ArrowUpRight size={18} weight="bold" /></ItemActions>
+      </a></Item>)}
+    </ItemGroup>
+  </>;
 }

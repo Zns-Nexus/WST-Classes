@@ -11,7 +11,7 @@ for (const viewport of [{ width: 1440, height: 960 }, { width: 390, height: 844 
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(base);
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.getByRole('heading', { name: 'Big dreams. Smarter preparation.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Coaching for SSC, HSC and entrance exams.' })).toBeVisible();
     await expect(page.locator('.hero-figure.is-active img')).toBeVisible();
     await expect.poll(() => page.locator('.hero-figure.is-active img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -23,24 +23,25 @@ for (const viewport of [{ width: 1440, height: 960 }, { width: 390, height: 844 
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await page.screenshot({ path: testInfo.outputPath('homepage-full.png'), fullPage: true });
     await page.getByRole('button', { name: 'Next slide', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'Build your basics. Back your ambitions.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'SSC and HSC board preparation.' })).toBeVisible();
     await page.getByRole('button', { name: 'Next slide', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'Think logically. Create what’s next.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Computer Science for HSC students.' })).toBeVisible();
     await page.getByRole('button', { name: 'Previous slide', exact: true }).click();
     await expect(page.locator('.slide-count')).toHaveText('02 / 03');
-    await page.getByRole('button', { name: 'Entrance exams', exact: true }).click();
+    await page.getByRole('radio', { name: 'Entrance exams', exact: true }).click();
     await expect(page.locator('.course-card')).toHaveCount(3);
-    await page.getByRole('button', { name: 'Computer science', exact: true }).click();
-    await expect(page.locator('.course-card')).toHaveCount(1);
-    await page.locator('.course-card .course-link').click();
+    for (const filters of await page.locator('.filter-tabs').all()) expect(await filters.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+    await page.getByRole('radio', { name: 'Board exams', exact: true }).click();
+    await expect(page.locator('.course-card')).toHaveCount(3);
+    await page.locator('.course-card').getByRole('link', { name: 'Computer Science', exact: true }).click();
     await expect(page).toHaveURL(`${base}/courses/hsc-computer-science`);
     await expect(page.getByRole('heading', { name: 'Computer Science at Work Smart.' })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: testInfo.outputPath('course-detail.png'), fullPage: true });
     await page.goto(`${base}/#updates`);
-    await page.getByRole('button', { name: 'Exam notices', exact: true }).click();
-    await expect(page.locator('.update-row')).toHaveCount(1);
-    await expect(page.locator('.update-row a')).toHaveAttribute('href', 'https://cetcell.mahacet.org/');
+    await page.getByRole('radio', { name: 'Exam notices', exact: true }).click();
+    await expect(page.locator('.update-item')).toHaveCount(2);
+    await expect(page.locator('.update-item').first()).toHaveAttribute('href', 'https://cetcell.mahacet.org/');
     await page.locator('#enquiry-course').selectOption('HSC Computer Science');
     await expect(page.locator('.enquiry-panel a')).toHaveAttribute('href', 'https://www.instagram.com/worksmart.hsc/');
     if (viewport.width < 768) {
@@ -96,7 +97,28 @@ test('header and carousel remain usable at smaller widths', async ({ page }) => 
     await page.setViewportSize({ width, height: 900 });
     await page.goto(base);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(page.locator('.hero-carousel .button-primary')).toBeVisible();
+    await expect(page.locator('.hero-carousel .hero-primary')).toBeVisible();
+  }
+});
+
+test('design trial works on phones', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(`${base}/demo`);
+    await page.evaluate(() => document.fonts.ready);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const headings = await page.locator('h1, h2').evaluateAll(elements => elements.map(element => {
+      const lines = [...element.querySelectorAll(':scope > span')];
+      const blocks = lines.length ? lines : [element];
+      return { text: element.textContent, lines: blocks.reduce((total, block) => total + Math.round(block.getBoundingClientRect().height / parseFloat(getComputedStyle(block).lineHeight)), 0) };
+    }));
+    for (const heading of headings) expect(heading.lines, heading.text ?? '').toBeLessThanOrEqual(2);
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await page.locator('#d-menu').getByRole('link', { name: 'Exam dates' }).click();
+    await expect(page.locator('#d-menu')).toBeHidden();
+    await page.getByRole('tab', { name: /NEET/ }).click();
+    await expect(page.locator('.d-list-head a')).toHaveText(/Ask about NEET/);
   }
 });
 

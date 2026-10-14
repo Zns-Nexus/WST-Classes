@@ -5,19 +5,17 @@ import Link from 'next/link';
 import { useEffect, useState, type CSSProperties } from 'react';
 import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin, Pause, Play } from '@phosphor-icons/react';
 import type { Variants } from 'motion/react';
-import { DotPattern } from '@/components/ui/dot-pattern';
-import { ShimmerLink } from '@/components/ui/shimmer-button';
 import { TextAnimate } from '@/components/ui/text-animate';
 
 const slides = [
-  { image: '/images/hsc-demo-oar.jpg', position: '50% 8%', colour: 'var(--blue)', spark: 'var(--maroon)', alt: 'A Work Smart teacher explaining a calculation at the board during an HSC demo lecture', title: ['Big dreams.', 'Smarter preparation.'], description: 'SSC, HSC and entrance exam coaching that brings your next step closer. Right here in Mira Road.', name: 'Your journey starts here', caption: 'In class at Work Smart', note: 'From our HSC demo lecture' },
-  { image: '/images/study.jpg', position: '38% 50%', colour: 'var(--maroon)', spark: 'var(--blue)', alt: 'A student studying an open textbook, illustrative photography', title: ['Build your basics.', 'Back your ambitions.'], description: 'Make sense of the chapter, not just the answer. Explore our school and higher secondary courses.', name: 'School & board preparation', caption: 'SSC & HSC · Maharashtra Board', note: 'Illustrative photography' },
-  { image: '/images/computer-science.jpg', position: '62% 45%', colour: 'var(--navy)', spark: 'var(--maroon)', alt: 'Students collaborating on a laptop, illustrative photography', title: ['Think logically.', 'Create what’s next.'], description: 'Make Computer Science part of your HSC journey. Explore programming, computer systems and more.', name: 'HSC Computer Science', caption: 'HSC Computer Science', note: 'Illustrative photography' },
+  { image: '/images/hsc-demo-oar.jpg', position: '50% 8%', colour: 'var(--brand-blue)', alt: 'A Work Smart teacher explaining a calculation at the board during an HSC demo lecture', title: ['Coaching for SSC, HSC', 'and entrance exams.'], description: 'Classes in Naya Nagar, Mira Road, with the teachers from our YouTube lessons.', name: 'Coaching in Mira Road', caption: 'In class at Work Smart', note: 'From our HSC demo lecture' },
+  { image: '/images/study.jpg', position: '38% 50%', colour: 'var(--brand-maroon)', alt: 'A student studying an open textbook, illustrative photography', title: ['SSC and HSC', 'board preparation.'], description: 'Chapter by chapter, with the question practice the Maharashtra Board expects.', name: 'Board preparation', caption: 'SSC and HSC, Maharashtra Board', note: 'Illustrative photography' },
+  { image: '/images/computer-science.jpg', position: '62% 45%', colour: 'var(--brand-navy)', alt: 'Students collaborating on a laptop, illustrative photography', title: ['Computer Science', 'for HSC students.'], description: 'Programming and computer systems, taught alongside your other HSC subjects.', name: 'HSC Computer Science', caption: 'HSC Computer Science', note: 'Illustrative photography' },
 ];
 
 const wordReveal: Variants = {
-  hidden: { opacity: 0, y: 10, filter: 'blur(4px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
   exit: { opacity: 0 },
 };
 
@@ -52,16 +50,15 @@ export function HeroCarousel() {
   const changeSlide = (index: number) => { setActive((index + slides.length) % slides.length); setPaused(true); };
   const current = slides[active];
 
-  return <div className="hero-wrap"><section className="hero-carousel" style={{ '--slide': current.colour, '--spark': current.spark } as CSSProperties} aria-roledescription="carousel" aria-label="Work Smart course highlights" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }} onKeyDown={(event) => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); changeSlide(active + (event.key === 'ArrowRight' ? 1 : -1)); } }}>
+  return <div className="hero-wrap"><section className="hero-carousel" style={{ '--slide': current.colour } as CSSProperties} aria-roledescription="carousel" aria-label="Work Smart course highlights" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }} onKeyDown={(event) => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); changeSlide(active + (event.key === 'ArrowRight' ? 1 : -1)); } }}>
     <div className="hero-content">
-      <DotPattern width={22} height={22} cr={1.1} className="-z-10 text-white/20 [mask-image:radial-gradient(ellipse_75%_70%_at_25%_45%,#000_15%,transparent_75%)]" />
       <div className="hero-copy">
         <div className="hero-slides" aria-live={paused || reduced ? 'polite' : 'off'}>{slides.map((slide, index) => <div key={slide.image} className={`hero-slide ${active === index ? 'is-active' : ''}`} aria-hidden={active !== index} inert={active !== index} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}: ${slide.name}`}>
           {index === 0 ? <h1><HeroTitle key={active === index ? 'on' : 'off'} lines={slide.title} animate={active === index && !reduced} /></h1> : <h2><HeroTitle key={active === index ? 'on' : 'off'} lines={slide.title} animate={active === index && !reduced} /></h2>}
           <p>{slide.description}</p>
         </div>)}</div>
-        <div className="hero-buttons"><ShimmerLink href="/#courses" className="button button-primary" background="#fff" shimmerColor="var(--spark)" shimmerSize="2px" shimmerDuration="2.6s">Find your course<ArrowRight size={18} weight="bold" /></ShimmerLink><Link href="/#contact" className="button button-on-dark">Talk to us <ArrowUpRight size={18} /></Link></div>
-        <div className="hero-location"><MapPin size={17} weight="fill" /> Your neighbourhood classroom. Naya Nagar, Mira Road.</div>
+        <div className="hero-buttons"><Link href="/#courses" className="button button-light hero-primary">Find your course <ArrowRight size={18} weight="bold" /></Link><Link href="/#contact" className="button button-on-dark">Ask us <ArrowUpRight size={18} /></Link></div>
+        <div className="hero-location"><MapPin size={17} weight="fill" /> Naya Nagar, Mira Road</div>
         <div className="hero-controls"><div className="slide-tabs" role="group" aria-label="Choose a slide">{slides.map((slide, index) => <button key={slide.name} className={active === index ? 'selected' : ''} aria-label={`Show slide ${index + 1}: ${slide.name}`} aria-pressed={active === index} onClick={() => changeSlide(index)}><span /></button>)}<span className="slide-count">{String(active + 1).padStart(2, '0')} / 03</span></div><div className="carousel-buttons"><button aria-label={paused ? 'Play slideshow' : 'Pause slideshow'} aria-pressed={paused} onClick={() => setPaused(!paused)} disabled={reduced}>{paused ? <Play size={16} weight="fill" /> : <Pause size={16} weight="fill" />}</button><button aria-label="Previous slide" onClick={() => changeSlide(active - 1)}><ArrowLeft size={19} weight="bold" /></button><button aria-label="Next slide" onClick={() => changeSlide(active + 1)}><ArrowRight size={19} weight="bold" /></button></div></div>
       </div>
     </div>
