@@ -18,6 +18,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en" className={jakarta.variable} suppressHydrationWarning><body>
-    <script dangerouslySetInnerHTML={{ __html: `try { const theme = localStorage.getItem('wst-theme'); document.documentElement.classList.toggle('dark', theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)); } catch { document.documentElement.classList.toggle('dark', matchMedia('(prefers-color-scheme: dark)').matches); }` }} />
+    <script dangerouslySetInnerHTML={{ __html: `try { document.documentElement.classList.toggle('dark', localStorage.getItem('wst-theme') === 'dark'); } catch {}` }} />
     <a className="skip-link" href="#main">Skip to content</a><SiteChrome><SiteHeader /></SiteChrome>{children}<SiteChrome><SiteFooter /></SiteChrome></body></html>;
 }
